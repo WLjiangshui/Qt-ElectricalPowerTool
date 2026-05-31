@@ -1,4 +1,4 @@
-// powercalculator.h — 电力负荷计算核心 v0.1
+// powercalculator.h — 电力负荷计算核心 v0.2
 #ifndef POWERCALCULATOR_H
 #define POWERCALCULATOR_H
 
@@ -6,9 +6,9 @@
 
 // 计算结果结构体
 struct PowerResult {
-    double activePower;        // 有功功率 P (W)
-    double reactivePower;      // 无功功率 Q (var)
-    double apparentPower;      // 视在功率 S (VA)
+    double activePower;        // 有功功率 P (kW)
+    double reactivePower;      // 无功功率 Q (kvar)
+    double apparentPower;      // 视在功率 S (kVA)
     double powerFactor;        // 功率因数 cosφ
     double lineCurrent;        // 线电流 (A)
     bool isValid;              // 有效性标记
@@ -23,8 +23,12 @@ public:
     static PowerResult calcThreePhase(double voltage, double current, double cosPhi);
 
     // 由有功功率和功率因数反算电流
-    // P: 有功功率(W), U: 线电压(V), cosPhi: 功率因数
+    // P: 有功功率(kW), U: 线电压(V), cosPhi: 功率因数
     static PowerResult calcFromActivePower(double activePower, double voltage, double cosPhi);
+
+    // 无功补偿容量计算
+    // P: 有功功率(kW), cosPhi1: 补偿前功率因数, cosPhi2: 目标功率因数
+    static double calcCompensationCapacity(double activePower, double cosPhi1, double cosPhi2);
 };
 
 #endif // POWERCALCULATOR_H
